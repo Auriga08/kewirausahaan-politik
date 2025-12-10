@@ -1,0 +1,228 @@
+/* === GLOBAL RESET & TYPOGRAPHY === */
+body {
+    font-family: 'Inter', sans-serif;
+    /* Latar belakang dinamis: Putih -> Pink Muda -> Ungu Muda */
+    background: linear-gradient(135deg, #fff1f2 0%, #ffffff 40%, #f3e8ff 100%);
+    /* Warna Text Utama: Midnight Indigo (Hitam keunguan tua yang elegan) */
+    color: #1e1b4b; 
+    overflow-x: hidden;
+    min-height: 100vh;
+    line-height: 1.6; /* Menambah keterbacaan */
+}
+
+/* --- FORCED VISIBILITY RESET (PENTING!) --- */
+/* Memaksa elemen teks utama untuk menggunakan warna dari body */
+h1, h2, h3, h4, h5, h6, p, span, li {
+    color: inherit; 
+}
+
+/* --- HEADING ENHANCEMENT (Agar Judul Lebih Kelihatan) --- */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    /* Efek Bayangan Teks Elegan:
+       Bayangan ungu tua halus (blur 12px) agar teks terangkat dari background */
+    text-shadow: 0 4px 12px rgba(30, 27, 75, 0.15);
+    letter-spacing: -0.02em; /* Rapatkan sedikit agar lebih modern */
+    margin-bottom: 1rem;
+}
+
+/* Memastikan link terlihat jelas, beri warna ungu tua */
+a {
+    color: #6d28d9; 
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+a:hover {
+    color: #ec4899; /* Berubah jadi pink saat di-hover */
+    /* Glow halus saat hover link */
+    text-shadow: 0 0 8px rgba(236, 72, 153, 0.4);
+}
+
+/* --- Scrollbar (Berry Smoothie Gradient) --- */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #f3e8ff; /* Light Lavender Track */
+}
+::-webkit-scrollbar-thumb {
+    /* Gradasi dari Pink ke Ungu */
+    background: linear-gradient(to bottom, #ec4899, #8b5cf6); 
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(to bottom, #db2777, #7c3aed);
+}
+
+/* --- Animations --- */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.fade-in-section { opacity: 0; }
+.fade-in-visible { animation: fadeIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+
+/* Modal styles (Frosted Glass with Purple Hint) */
+.modal {
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    /* Backdrop hitam keunguan */
+    background: rgba(15, 23, 42, 0.4); 
+    backdrop-filter: blur(8px);
+}
+.modal-content {
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    /* Pastikan background modal putih bersih */
+    background: #ffffff; 
+    /* Border gradasi tipis */
+    border: 1px solid #f3e8ff;
+    border-top: 4px solid #8b5cf6; /* Aksen ungu di atas modal */
+    box-shadow: 0 25px 50px -12px rgba(139, 92, 246, 0.25);
+    /* Paksa warna teks di dalam modal */
+    color: #1e1b4b; 
+}
+
+/* --- Animated Background Objects (Colorful Orbs) --- */
+/* Pastikan ini di belakang konten */
+.background-animation {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+    overflow: hidden;
+    background: transparent;
+    pointer-events: none; /* Agar bisa diklik tembus */
+}
+
+.circle {
+    position: absolute;
+    border-radius: 50%;
+    /* Orb 1: Pink Dominan */
+    background: radial-gradient(circle, rgba(244, 114, 182, 0.3) 0%, rgba(244, 114, 182, 0) 70%);
+    animation: move 30s infinite linear;
+    filter: blur(60px); 
+    /* Opacity diturunkan ke 0.5 agar Teks lebih menang kontrasnya */
+    opacity: 0.5; 
+}
+
+/* Orb 2: Ungu Dominan */
+.circle.alt-color {
+    background: radial-gradient(circle, rgba(167, 139, 250, 0.35) 0%, rgba(167, 139, 250, 0) 70%);
+}
+
+/* Orb 3: Campuran Putih & Biru Muda untuk penyeimbang */
+.circle.third-color {
+    background: radial-gradient(circle, rgba(196, 181, 253, 0.3) 0%, rgba(255, 255, 255, 0) 60%);
+    opacity: 0.4;
+}
+
+.circle:nth-child(1) { width: 50vw; height: 50vw; top: -15%; left: -10%; animation-duration: 35s; } 
+.circle:nth-child(2) { width: 45vw; height: 45vw; bottom: -5%; right: -5%; animation-duration: 40s; animation-delay: -5s; } 
+.circle:nth-child(3) { width: 35vw; height: 35vw; top: 40%; left: 30%; animation-duration: 45s; background: radial-gradient(circle, rgba(232, 121, 249, 0.2) 0%, rgba(0,0,0,0) 70%); } 
+
+@keyframes move {
+    0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+    33% { transform: translate(10vw, -5vh) rotate(120deg) scale(1.1); }
+    66% { transform: translate(-5vw, 10vh) rotate(240deg) scale(0.9); }
+    100% { transform: translate(0, 0) rotate(360deg) scale(1); }
+}
+
+/* --- Particles (Purple Dust) --- */
+#particles-container {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1; pointer-events: none;
+}
+
+.particle {
+    position: absolute;
+    bottom: -10px;
+    /* Partikel Ungu Muda */
+    background-color: rgba(124, 58, 237, 0.3); 
+    border-radius: 50%;
+    animation-name: floatUp;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+@keyframes floatUp {
+    from { transform: translateY(0); opacity: 0.6; }
+    to { transform: translateY(-105vh); opacity: 0; }
+}
+
+/* --- Shooting Stars (Violet Tail) --- */
+.shooting-star {
+    position: absolute;
+    height: 2px;
+    /* Gradasi Ekor: Ungu ke Pink */
+    background: linear-gradient(-45deg, #8b5cf6, #ec4899, transparent);
+    border-radius: 999px;
+    filter: drop-shadow(0 0 5px rgba(139, 92, 246, 0.6));
+    animation: tail 4s ease-in-out infinite, shooting 4s ease-in-out infinite;
+}
+
+@keyframes tail {
+    0% { width: 0; } 30% { width: 120px; } 100% { width: 0; }
+}
+@keyframes shooting {
+    0% { transform: translateX(0); opacity: 1; } 100% { transform: translateX(350px); opacity: 0; }
+}
+
+/* --- Section Separator (Rainbow Gradient) --- */
+.section-separator {
+    width: 80%; max-width: 450px; height: 2px; margin: 0 auto;
+    /* Gradasi Penuh: Pink -> Ungu -> Pink */
+    background: linear-gradient(90deg, transparent, #ec4899, #8b5cf6, #ec4899, transparent);
+}
+
+/* --- Enhanced Card Hover Effect (Colorful Shadow) --- */
+.card-hover-effect {
+    transition: all 0.4s ease;
+    background: #ffffff; 
+    border: 1px solid #f3e8ff; 
+    color: #1e1b4b; 
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.card-hover-effect:hover {
+    transform: translateY(-8px);
+    border-color: #d8b4fe;
+    /* Bayangan campuran Ungu dan Pink */
+    box-shadow: 0 20px 30px -5px rgba(139, 92, 246, 0.2), 
+                0 10px 10px -5px rgba(236, 72, 153, 0.15);
+}
+
+/* --- Animated Gradient Text (Elegant Dark to Colorful) --- */
+.animated-gradient-text {
+    /* Gradasi: Midnight Blue -> Pink Neon -> Ungu Neon -> Midnight Blue */
+    background: linear-gradient(90deg, #1e1b4b, #ec4899, #8b5cf6, #1e1b4b);
+    background-size: 200% auto;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent !important; /* Important agar tidak tertimpa warna body */
+    animation: gradient-animation 6s linear infinite;
+    font-weight: 800;
+    /* PENTING: Matikan shadow di sini agar warna gradasi tidak kotor */
+    text-shadow: none !important; 
+}
+
+@keyframes gradient-animation {
+    to { background-position: 200% center; }
+}
+
+/* --- Hero Button Glow (Aurora Gradient) --- */
+.hero-button-glow {
+    /* Gradasi diagonal Pink ke Ungu */
+    background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+    color: white !important; /* Teks tombol HARUS putih */
+    border: none;
+    transition: 0.3s ease;
+    font-weight: 600;
+}
+.hero-button-glow:hover {
+    transform: translateY(-2px);
+    /* Glow yang memancarkan warna ungu */
+    box-shadow: 0 10px 25px rgba(139, 92, 246, 0.5), 0 5px 10px rgba(236, 72, 153, 0.3);
+}
+
+/* Hero Background Adjustments */
+#hero-radial-bg {
+    background: radial-gradient(circle at center, rgba(167, 139, 250, 0.05) 0%, transparent 100%);
+}
