@@ -1,21 +1,43 @@
-// main.js
-// Logika Utama: Bahasa, Modal, dan Render Data
+// main.js UPDATE TERBARU (Dengan Fitur Slider)
 
 import { translations, allProjects } from './data.js';
-import { initAnimations } from './animations.js'; // Import file animasi yang sudah ada
+import { initAnimations } from './animations.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     
-    // 1. JALANKAN ANIMASI
+    // 1. JALANKAN ANIMASI UMUM
     initAnimations();
 
-    // 2. LOGIKA GANTI BAHASA
+    // ----------------------------------------------------
+    // 2. LOGIKA SLIDER BACKGROUND (INI YANG HILANG KEMARIN)
+    // ----------------------------------------------------
+    const slides = document.querySelectorAll('#main-slider img');
+    let currentSlide = 0;
+    const slideInterval = 4000; // Ganti gambar setiap 4 detik
+
+    if (slides.length > 0) {
+        setInterval(() => {
+            // 1. Sembunyikan slide yang sedang tampil sekarang
+            slides[currentSlide].classList.remove('opacity-100');
+            slides[currentSlide].classList.add('opacity-0');
+
+            // 2. Hitung urutan slide berikutnya (kalau sudah terakhir, balik ke 0)
+            currentSlide = (currentSlide + 1) % slides.length;
+
+            // 3. Munculkan slide berikutnya
+            slides[currentSlide].classList.remove('opacity-0');
+            slides[currentSlide].classList.add('opacity-100');
+        }, slideInterval);
+    }
+    // ----------------------------------------------------
+
+
+    // 3. LOGIKA BAHASA & LAINNYA (TETAP SAMA SEPERTI SEBELUMNYA)
     const langBtn = document.getElementById('lang-btn');
     const langMenu = document.getElementById('lang-menu');
     const langText = document.getElementById('lang-text');
     const langLoader = document.getElementById('lang-loader');
 
-    // Toggle Menu Bahasa
     if (langBtn && langMenu) {
         langBtn.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -25,7 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 10);
         });
 
-        // Tutup menu jika klik di luar
         document.addEventListener('click', (e) => {
             if (!langBtn.contains(e.target) && !langMenu.contains(e.target)) {
                 langMenu.classList.add('opacity-0');
@@ -35,7 +56,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Klik Opsi Bahasa
         langMenu.addEventListener('click', (e) => {
             if (e.target.tagName === 'A') {
                 e.preventDefault();
@@ -43,7 +63,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const currentLang = localStorage.getItem('language') || 'id';
                 
                 if (selectedLang !== currentLang) {
-                    // Efek Loading saat ganti bahasa
                     if (langLoader) langLoader.classList.remove('opacity-0', 'pointer-events-none');
                     langMenu.classList.add('hidden', 'opacity-0');
 
@@ -59,9 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Fungsi Update Konten
     function updateContent(lang) {
-        // Update teks statis (Navbar, Hero, dll)
         const elements = document.querySelectorAll('[data-key]');
         elements.forEach(el => {
             const key = el.getAttribute('data-key');
@@ -75,22 +92,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         localStorage.setItem('language', lang);
-        
-        // Render ulang Grid Proyek dengan bahasa baru
         renderProjects(lang);
     }
 
-    // 3. LOGIKA RENDER GRID PROYEK
     function renderProjects(lang) {
         const grid = document.getElementById('project-grid');
         if (!grid) return;
 
-        grid.innerHTML = ''; // Reset isi grid
+        grid.innerHTML = ''; 
 
         allProjects.forEach(project => {
             const card = document.createElement('div');
-            // Class style disamakan dengan tema
-            card.className = 'card-hover-effect bg-white border border-pink-100 rounded-2xl overflow-hidden shadow-md flex flex-col h-full opacity-0 translate-y-10 transition-all duration-700'; // opacity-0 untuk animasi entry
+            card.className = 'card-hover-effect bg-white border border-pink-100 rounded-2xl overflow-hidden shadow-md flex flex-col h-full opacity-0 translate-y-10 transition-all duration-700';
             
             card.innerHTML = `
                 <div class="h-48 overflow-hidden bg-gray-100 relative group">
@@ -115,38 +128,31 @@ document.addEventListener('DOMContentLoaded', () => {
             grid.appendChild(card);
         });
 
-        // Jalankan animasi fade-in untuk grid yang baru dibuat
         setTimeout(() => {
             const newCards = grid.querySelectorAll('.card-hover-effect');
             newCards.forEach((c, index) => {
                 setTimeout(() => {
                     c.classList.remove('opacity-0', 'translate-y-10');
-                }, index * 100); // Stagger animation
+                }, index * 100); 
             });
         }, 100);
 
         attachModalListeners();
     }
 
-    // 4. LOGIKA MODAL POPUP
     const modal = document.getElementById('project-modal');
     const closeModalBtn = document.getElementById('close-modal-btn');
     const modalTitle = document.getElementById('modal-title');
     const modalDesc = document.getElementById('modal-description');
     const modalTags = document.getElementById('modal-tags');
     const modalImgContainer = document.getElementById('modal-image-container');
-    const modalLiveLink = document.getElementById('modal-live-link');
-    const modalRepoLink = document.getElementById('modal-repo-link');
 
     function openModal(projectId) {
         const project = allProjects.find(p => p.id === projectId);
         if (!project) return;
-
         const currentLang = localStorage.getItem('language') || 'id';
-
         modalTitle.textContent = project.title;
         modalDesc.textContent = project.description[currentLang];
-        
         modalTags.innerHTML = '';
         project.tags.forEach(tag => {
             const span = document.createElement('span');
@@ -154,11 +160,9 @@ document.addEventListener('DOMContentLoaded', () => {
             span.textContent = tag;
             modalTags.appendChild(span);
         });
-
         if (project.images && project.images.length > 0) {
             modalImgContainer.innerHTML = `<img src="${project.images[0]}" class="w-full h-full object-cover">`;
         }
-
         modal.classList.remove('invisible', 'opacity-0');
     }
 
@@ -190,13 +194,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Smooth Scroll untuk Anchor Links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
             const targetId = this.getAttribute('href');
             if (targetId === '#') return;
-            
             const targetElement = document.querySelector(targetId);
             if (targetElement) {
                 targetElement.scrollIntoView({ behavior: 'smooth' });
@@ -204,8 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- INITIALIZE STARTUP ---
-    const savedLang = localStorage.getItem('language') || 'id'; // Default Bahasa
+    const savedLang = localStorage.getItem('language') || 'id';
     if (langText) langText.textContent = savedLang.toUpperCase();
     updateContent(savedLang);
 });
